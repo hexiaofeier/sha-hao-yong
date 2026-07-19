@@ -1,63 +1,74 @@
 # 啥好用 Skill
 
-把候选 Skill 写成一份普通人能看懂的 HTML 安装前说明书，回答三个问题：
+## 你是不是也这样
 
-- 这个 Skill 是啥；
-- 这个 Skill 好用吗；
-- 这个 Skill 适合你吗。
+经常刷到一些推荐 Skill 的帖子，效果写得天花乱坠，好像安上就能变身成武林宗师。但看久了，理性的你难免会冒出一个问题：
 
-它只读检查公开文件和用户提供的材料，不自动安装候选对象，也不替代代码安全审计、隐私合规审查或专业测评。
+**“这个 Skill 到底是啥，好用吗，我能用吗？”**
 
-## 主要评估内容
+装吧，之前跟着排行榜一个个试 Skill 时，也不是没踩过坑——折腾一晚上，要安各种依赖、要 API Key、要联网……一路十三招装完才发现，嘿，不太用得上，还白费不少 Token。
 
-- Skill 定位、调用时机、输入、任务步骤与最终交付；
-- 安装复杂度、任务复杂度与 Skill 调用准确性；
-- 公开关注度、额外涉及费用、Token 消耗与风险值；
-- 适合场景、不适合场景与安装建议。
+不装吧，万一错过了一个真正适合自己的好 Skill，怎么办？
 
-最终生成固定版式的单文件 HTML 报告。
+“啥好用 Skill”就是干这个的：**无论是 GitHub 网址，还是 Skill 压缩包或文件夹，你把候选 Skill 丢给它，再告诉它你想干什么。它会从里到外扒一遍，初步判断它值不值得装，帮你省点时间和 Token。**
 
-## 兼容性
+---
+
+## 它就问三个大白话
+
+啥好用 Skill 就磕三个直白的问题：
+
+1. **这是啥** —— 它到底能干嘛，谁用得上，得给它喂点什么
+2. **好用吗** —— 安装麻不麻烦，任务执行麻不麻烦，公开关注度如何，费不费 Token，有没有隐藏收费点，有没有什么风险
+3. **适合我吗** —— 适合谁，不适合谁，对照你的真实需求，装还是不装，一句话说清楚
+
+它会翻看公开网页，或读取你提供的文件和材料，最后生成一份定制化的 **HTML 版 Skill 安装前说明书**。打开就能看，也能直接分享给其他朋友。
+
+---
+
+## 兼容性：Codex 和 Claude Code 都吃
 
 ### Codex
 
-把整个仓库放到：
+丢进去：
 
 ```text
 ~/.codex/skills/sha-hao-yong/
 ```
 
-新建会话后，可以直接说“用啥好用评估这个 Skill”，也可以显式调用 `$sha-hao-yong`。
+新开会话，直接说“用啥好用评估这个 Skill”，或者显式喊它 `$sha-hao-yong`。
 
 ### Claude Code
 
-把整个仓库放到：
+丢进去：
 
 ```text
 ~/.claude/skills/sha-hao-yong/
 ```
 
-Claude Code 会读取同一份 `SKILL.md`。可以直接描述评估需求，也可以输入：
+同样可以直接描述你的评估需求，或者输入：
 
 ```text
 /sha-hao-yong
 ```
 
-`agents/openai.yaml` 仅提供 Codex 展示信息，Claude Code 会忽略它。核心规则、References 和 Python 渲染脚本由两端共用。
+---
 
-## 安装
+## 安装（复制粘贴就行）
 
 ### Windows PowerShell
 
 Codex：
 
 ```powershell
+New-Item -ItemType Directory -Force "$HOME/.codex/skills" | Out-Null
 git clone https://github.com/hexiaofeier/sha-hao-yong.git "$HOME/.codex/skills/sha-hao-yong"
 ```
 
 Claude Code：
 
 ```powershell
+New-Item -ItemType Directory -Force "$HOME/.claude/skills" | Out-Null
 git clone https://github.com/hexiaofeier/sha-hao-yong.git "$HOME/.claude/skills/sha-hao-yong"
 ```
 
@@ -66,29 +77,43 @@ git clone https://github.com/hexiaofeier/sha-hao-yong.git "$HOME/.claude/skills/
 Codex：
 
 ```bash
+mkdir -p ~/.codex/skills
 git clone https://github.com/hexiaofeier/sha-hao-yong.git ~/.codex/skills/sha-hao-yong
 ```
 
 Claude Code：
 
 ```bash
+mkdir -p ~/.claude/skills
 git clone https://github.com/hexiaofeier/sha-hao-yong.git ~/.claude/skills/sha-hao-yong
 ```
 
-## 运行要求
+安装后新开一个 Codex 或 Claude Code 会话，让它重新识别 Skill。
 
-- 能读取 Skill 和访问候选材料的 AI agent；
-- Python 3，仅用于校验 JSON 并生成 HTML；
-- Python 脚本只使用标准库，不需要额外安装依赖。
+---
+
+## 跑起来需要啥
+
+- 一个能读 Skill、能看候选材料的 AI agent，例如 Codex 或 Claude Code
+- Python 3——只用来校验 JSON、生成 HTML，跑完你甚至不会意识到它存在
+- 不用安装第三方 Python 依赖，渲染脚本全程只用标准库，很干净
+
+---
 
 ## 使用流程
 
-1. 提供候选 Skill 的链接、压缩包、文件夹或 `SKILL.md`；
-2. 选择结合个人需求评估，或按一般目标用户评估；
-3. AI agent 只读收集证据并完成评估；
-4. Skill 生成并校验 HTML 报告。
+1. 把候选 Skill 的链接、压缩包、文件夹或 `SKILL.md` 丢给它
+2. 选一个模式：
+   - 结合你的具体需求评估：很明确自己想干什么时选
+   - 按一般目标用户评估：需求还不明确，只想先了解一下时选
+3. 它只读翻材料、找证据，不用你一直盯着
+4. 校验通过后，自动生成一份 HTML 报告
 
-## 目录结构
+全程你只需要负责甩链接和 Skill 材料，再回答一两个问题，剩下的它自己跑。
+
+---
+
+## 目录
 
 ```text
 sha-hao-yong/
@@ -102,10 +127,16 @@ sha-hao-yong/
     └── render_report.py
 ```
 
-## 免责声明
+---
 
-“啥好用”只提供安装前的采用参考，不能替代代码安全审计、恶意代码检测、软件质量与兼容性测试、隐私合规审查、许可证审查或法律意见。下载、安装、授权、付费、上传或运行自动操作前，请自行核对来源、依赖、权限、数据去向、收费和许可证。
+## 先说清楚
+
+“啥好用”给的是**装不装的参考意见**，不是免死金牌。它只能根据当前可读的公开网页、文件和说明作安装前判断，不能替你做代码安全审计、恶意代码检测、软件质量测试、隐私合规审查，也不能签法律文件。
+
+下载、安装、授权、付费、上传或运行自动操作之前，请再核对来源、依赖、权限、数据去向、收费方式和许可证。安装 Skill 的潜在风险，最终仍需要你自己把关。
+
+---
 
 ## License
 
-[MIT License](LICENSE)
+[MIT License](LICENSE)——欢迎使用和修改，具体权利与免责边界以许可证为准 😌
