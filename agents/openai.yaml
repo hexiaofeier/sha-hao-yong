@@ -1,0 +1,4 @@
+interface:
+  display_name: "啥好用 Skill"
+  short_description: "把 Skill 的用途、安装与任务代价、风险和匹配度做成固定版式 HTML 说明书"
+  default_prompt: "Use $sha-hao-yong to assess this Skill before adoption and render the fixed plain-language HTML brief."
