@@ -55,7 +55,7 @@
 
 ---
 
-## 安装（复制粘贴就行）
+## 安装方式
 
 ### Windows PowerShell
 
@@ -89,11 +89,13 @@ mkdir -p ~/.claude/skills
 git clone https://github.com/hexiaofeier/sha-hao-yong.git ~/.claude/skills/sha-hao-yong
 ```
 
-安装后新开一个 Codex 或 Claude Code 会话，让它重新识别 Skill。
+**最简单的，就是把 啥好用 skill 链接发给agent，让它们直接安装就行。**
+
+安装后记得新开一个 Codex 或 Claude Code 会话，让它重新识别 Skill。
 
 ---
 
-## 跑起来需要啥
+## 它跑起来很轻
 
 - 一个能读 Skill、能看候选材料的 AI agent，例如 Codex 或 Claude Code
 - Python 3——只用来校验 JSON、生成 HTML，跑完你甚至不会意识到它存在
@@ -101,7 +103,7 @@ git clone https://github.com/hexiaofeier/sha-hao-yong.git ~/.claude/skills/sha-h
 
 ---
 
-## 使用流程
+## 它的使用流程
 
 1. 把候选 Skill 的链接、压缩包、文件夹或 `SKILL.md` 丢给它
 2. 选一个模式：
@@ -114,7 +116,7 @@ git clone https://github.com/hexiaofeier/sha-hao-yong.git ~/.claude/skills/sha-h
 
 ---
 
-## 目录
+## 它的目录
 
 ```text
 sha-hao-yong/
@@ -130,11 +132,11 @@ sha-hao-yong/
 
 ---
 
-## 先说清楚
+## 免责声明
 
 “啥好用”给的是**装不装的参考意见**，不是免死金牌。它只能根据当前可读的公开网页、文件和说明作安装前判断，不能替你做代码安全审计、恶意代码检测、软件质量测试、隐私合规审查，也不能签法律文件。
 
-下载、安装、授权、付费、上传或运行自动操作之前，请再核对来源、依赖、权限、数据去向、收费方式和许可证。安装 Skill 的潜在风险，最终仍需要你自己把关。
+下载、安装、授权、付费、上传或运行自动操作之前，请再核对来源、依赖、权限、数据去向、收费方式和许可证。安装 Skill 的潜在风险，最终仍需要你自己把关哟！
 
 ---
 
