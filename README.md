@@ -89,7 +89,7 @@ mkdir -p ~/.claude/skills
 git clone https://github.com/hexiaofeier/sha-hao-yong.git ~/.claude/skills/sha-hao-yong
 ```
 
-**最简单的，就是把 啥好用 skill 链接发给agent，让它们直接安装就行。**
+### 最简单的，就是把 啥好用 skill 链接发给agent，让它们直接安装就行。
 
 安装后记得新开一个 Codex 或 Claude Code 会话，让它重新识别 Skill。
 
