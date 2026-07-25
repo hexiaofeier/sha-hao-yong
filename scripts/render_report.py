@@ -8,87 +8,120 @@ from datetime import date
 from html import escape
 from pathlib import Path
 
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8")
+    sys.stderr.reconfigure(encoding="utf-8")
+
+
+STYLE_NAME = "白纸墨字"
 
 CSS = """
 * { box-sizing: border-box; }
 html { background: var(--paper); }
 body {
   margin: 0;
-  color: var(--body-text);
+  color: var(--ink);
   background: var(--paper);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", "PingFang SC", Arial, sans-serif;
   font-size: 15px;
-  line-height: 1.65;
+  line-height: 1.7;
 }
-a { color: var(--body-text); text-decoration-color: var(--teal); text-underline-offset: 3px; }
-.page { position: relative; width: min(1040px, calc(100% - 36px)); margin: 0 auto; padding: 42px 0 64px; overflow: hidden; }
-.page::before { content: ''; position: absolute; top: -75px; right: -75px; width: 200px; height: 200px; border-radius: 50%; background: rgba(88, 160, 140, 0.24); z-index: 0; pointer-events: none; }
-.page::after { content: ''; position: absolute; bottom: -95px; left: -95px; width: 240px; height: 240px; border-radius: 50%; background: rgba(230, 75, 60, 0.16); z-index: 0; pointer-events: none; }
-main.page > * { position: relative; z-index: 1; }
-.hero { border-top: 6px solid var(--teal); padding: 26px 0 24px; }
-.eyebrow { margin: 0 0 6px; font-size: 13px; font-weight: 800; letter-spacing: .14em; color: var(--teal); }
-h2, h3, .scale-explain, summary, th { color: var(--ink); }
-.title-red, .score-red { color: var(--gold); }
-.title-teal, .score-teal { color: var(--ink); }
-.section-summary, .fit-verdict { color: var(--body-text); }
-details h3 { color: var(--gold); }
-h1 { margin: 0; font-size: clamp(30px, 5vw, 48px); line-height: 1.2; letter-spacing: -.03em; }
-.meta { display: flex; flex-wrap: wrap; gap: 8px 18px; margin-top: 14px; font-size: 13px; }
-.positioning { margin: 24px 0 0; padding: 18px 20px; border-radius: 10px; border-left: 4px solid var(--teal); background: rgba(255, 255, 255, 0.45); box-shadow: 0 3px 10px rgba(16, 20, 23, 0.05); font-size: 17px; font-weight: 400; }
+a { color: var(--ink); text-decoration-color: var(--line); text-underline-offset: 3px; }
+a:hover { text-decoration-color: currentColor; }
+.page { width: min(1040px, calc(100% - 36px)); margin: 0 auto; padding: 40px 0 60px; }
+
+.hero { border-top: 2px solid var(--ink); padding: 22px 0 22px; }
+.eyebrow { margin: 0 0 10px; font-size: 12px; font-weight: 700; letter-spacing: .16em; color: var(--muted); text-transform: uppercase; }
+h1 { margin: 0; font-size: clamp(30px, 5vw, 46px); line-height: 1.2; letter-spacing: -.02em; font-weight: 800; }
+.title-red { color: var(--red); }
+.title-neutral { color: var(--ink); font-weight: 500; }
+.meta { display: flex; flex-wrap: wrap; gap: 6px 20px; margin-top: 14px; font-size: 13px; color: var(--muted); }
+.positioning { margin: 22px 0 0; padding: 16px 20px; border-radius: 4px; border-left: 3px solid var(--blue); background: var(--soft); font-size: 16px; font-weight: 400; color: var(--ink); }
 .positioning span { display: block; }
 .positioning span + span { margin-top: 4px; }
-.section { margin-top: 38px; }
-.section-title { display: flex; align-items: center; gap: 12px; margin: 0 0 16px; font-size: 25px; line-height: 1.3; }
-.section-title::before { content: ""; width: 28px; height: 4px; background: var(--teal); flex: 0 0 auto; }
-.score-head { display: flex; align-items: end; justify-content: space-between; gap: 16px; margin: 22px 0 4px; }
-.score-value { font-size: 38px; font-weight: 850; line-height: 1.1; }
-.score-basis { color: var(--body-text); font-size: 14px; text-align: right; }
-.scale { display: grid; grid-template-columns: repeat(10, 1fr); gap: 4px; margin-top: 15px; height: 20px; }
-.scale-segment { min-width: 0; border: 1px solid rgba(230, 75, 60, 0.4); background: rgba(230, 75, 60, 0.05); overflow: hidden; }
-.scale-fill { display: block; height: 100%; }
-.scale-note { margin: 8px 0 0; font-size: 12px; }
-.scale-explain { display: block; margin-bottom: 2px; font-weight: 700; }
-.conclusion-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 20px; }
-.conclusion-card { border-radius: 12px; border-left: 4px solid var(--teal); background: rgba(255, 255, 255, 0.42); box-shadow: 0 3px 12px rgba(16, 20, 23, 0.06); padding: 17px 18px; }
-.conclusion-card h3 { margin: 0 0 10px; font-size: 17px; }
-.conclusion-card ul { padding-left: 1.1em; }
-table { width: 100%; border-collapse: separate; border-spacing: 0; border: 1px solid var(--ink); border-radius: 12px; overflow: hidden; box-shadow: 0 3px 12px rgba(16, 20, 23, 0.05); }
-th, td { padding: 13px 14px; border-top: 1px solid var(--line); border-left: 1px solid var(--line); vertical-align: top; text-align: left; }
+
+.section { margin-top: 44px; }
+.section-title { display: flex; align-items: baseline; gap: 10px; margin: 0 0 16px; font-size: 23px; line-height: 1.3; font-weight: 800; color: var(--ink); }
+.section-title .num { font-size: 15px; font-weight: 700; padding: 2px 8px; border-radius: 3px; }
+.c-blue .num { background: var(--blue); color: #fff; }
+.c-red .num { background: var(--red); color: #fff; }
+.c-green .num { background: var(--green); color: var(--ink); }
+.c-amber .num { background: var(--amber); color: var(--ink); }
+
+.section-summary { margin: 0 0 16px; padding: 12px 16px; border-left: 3px solid; background: var(--soft); font-weight: 600; font-size: 15px; border-radius: 4px; color: var(--ink); }
+.section-summary.c-blue { border-left-color: var(--blue); }
+.section-summary.c-green { border-left-color: var(--green); }
+.section-summary.c-amber { border-left-color: var(--amber); }
+.fit-verdict { color: var(--ink); border-left: 3px solid var(--red); background: var(--soft); padding: 12px 16px; font-weight: 700; font-size: 16px; border-radius: 4px; margin: 0 0 16px; }
+
+.score-head { display: flex; align-items: end; justify-content: space-between; gap: 16px; margin: 20px 0 6px; }
+.score-value { font-size: 36px; font-weight: 850; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.score-num { color: var(--red); }
+.score-label { color: var(--ink); font-weight: 700; }
+.score-basis { color: var(--muted); font-size: 13px; text-align: right; max-width: 320px; }
+.scale { display: grid; grid-template-columns: repeat(10, 1fr); gap: 3px; margin-top: 14px; height: 16px; }
+.scale-segment { min-width: 0; background: var(--soft); border: 1px solid var(--line); overflow: hidden; }
+.scale-fill { display: block; height: 100%; background: var(--red); }
+.scale-note { margin: 8px 0 0; font-size: 12px; color: var(--muted); }
+.scale-explain { display: block; margin-bottom: 2px; font-weight: 700; color: var(--ink); }
+
+.plain-box, .card { border-radius: 4px; border: 1px solid var(--line); border-left-width: 3px; background: #fff; padding: 16px 18px; }
+.plain-box h3, .card h3 { margin: 0 0 9px; font-size: 15px; color: var(--ink); font-weight: 800; }
+.plain-box ul, .card ul, .card ol { padding-left: 1.1em; color: var(--ink); }
+.plain-box li, .card li { color: var(--ink); }
+
+.conclusion-box { margin-top: 20px; border-radius: 4px; border: 1px solid var(--line); border-left: 3px solid var(--blue); background: #fff; padding: 4px 20px; }
+.conclusion-block { padding: 16px 0; }
+.conclusion-block + .conclusion-block { border-top: 1px dashed var(--line); }
+.conclusion-block h3 { margin: 0 0 9px; font-size: 15px; font-weight: 800; color: var(--ink); }
+.conclusion-block p { margin: 0; color: var(--ink); }
+
+table { width: 100%; border-collapse: separate; border-spacing: 0; border: 1px solid var(--line); border-radius: 4px; overflow: hidden; }
+th, td { padding: 12px 14px; border-top: 1px solid var(--line); border-left: 1px solid var(--line); vertical-align: top; text-align: left; color: var(--ink); }
 tr:first-child th, tr:first-child td { border-top: 0; }
 th:first-child, td:first-child { border-left: 0; }
-th { background: var(--soft-ink); font-size: 17px; font-weight: 800; }
-td:first-child { color: var(--ink); font-weight: 400; }
+th { background: var(--soft); font-size: 16px; font-weight: 800; color: var(--ink); }
+td:first-child { font-weight: 700; }
 .metric-table th:nth-child(1) { width: 160px; }
 .metric-table th:nth-child(2) { width: 240px; }
+.metric-table td:nth-child(2) { color: var(--red); font-weight: 700; }
+.metric-table td:nth-child(2) .est-note { color: var(--ink); font-weight: 400; }
+h3.sub-h { margin: 30px 0 12px; font-size: 17px; color: var(--ink); font-weight: 800; }
+
 ul, ol { margin: 0; padding-left: 1.25em; }
 li + li { margin-top: 5px; }
-.what-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
-.card { border-radius: 12px; border-left: 4px solid var(--teal); background: rgba(255, 255, 255, 0.42); box-shadow: 0 3px 12px rgba(16, 20, 23, 0.06); padding: 16px; }
-.card h3 { margin: 0 0 9px; font-size: 15px; }
-.card p { margin: 0; }
-.card p + p { margin-top: 9px; }
-.section-summary { margin: 0 0 14px; padding: 13px 16px; border-left: 4px solid var(--gold); background: transparent; font-weight: 700; }
-.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 14px 0; }
-.plain-box { border-radius: 12px; border-left: 4px solid var(--teal); background: rgba(255, 255, 255, 0.42); box-shadow: 0 3px 12px rgba(16, 20, 23, 0.06); padding: 17px 18px; }
-.plain-box h3 { margin: 0 0 10px; font-size: 17px; }
-.fit-verdict { margin: 0 0 14px; padding: 13px 16px; border-left: 4px solid var(--gold); background: transparent; font-size: 17px; font-weight: 700; }
+
+.what-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 4px; }
+.what-grid .card { border-left-color: var(--green); }
+.what-grid .card h3 { display: flex; align-items: center; gap: 8px; }
+.what-grid .card h3 .step-no { display: inline-grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; background: var(--green); color: var(--ink); font-size: 12px; font-weight: 800; flex: 0 0 auto; }
+
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 14px 0; }
+
 .steps { counter-reset: step; list-style: none; padding: 0; display: grid; gap: 10px; }
-.steps li { display: grid; grid-template-columns: 34px 1fr; gap: 11px; align-items: start; margin: 0; }
-.steps li::before { counter-increment: step; content: counter(step); display: grid; place-items: center; width: 30px; height: 30px; border-radius: 8px; background: rgba(255, 255, 255, 0.55); border: 1px solid var(--teal); color: var(--teal); font-weight: 850; }
-details { margin-top: 34px; border-radius: 12px; border-left: 4px solid var(--gold); background: rgba(255, 255, 255, 0.38); box-shadow: 0 3px 12px rgba(16, 20, 23, 0.06); padding: 12px 15px; }
-summary { cursor: pointer; font-size: 17px; font-weight: 800; }
-.notice { margin-top: 34px; padding: 20px 22px; border-radius: 14px; border-left: 4px solid var(--teal); background: rgba(255, 255, 255, 0.45); box-shadow: 0 4px 14px rgba(16, 20, 23, 0.06); }
-.notice h2 { margin: 0 0 10px; font-size: 20px; }
-.notice li + li { margin-top: 8px; }
-.footer-line { display: flex; align-items: center; gap: 16px; margin-top: 46px; color: var(--teal); font-size: 13px; font-weight: 800; letter-spacing: .06em; white-space: nowrap; }
-.footer-line::before, .footer-line::after { content: ""; height: 6px; background: var(--teal); flex: 1 1 auto; }
+.steps li { display: grid; grid-template-columns: 30px 1fr; gap: 11px; align-items: start; margin: 0; color: var(--ink); }
+.steps li::before { counter-increment: step; content: counter(step); display: grid; place-items: center; width: 26px; height: 26px; border-radius: 4px; background: var(--soft); border: 1px solid var(--line); color: var(--ink); font-weight: 800; font-size: 13px; }
+
+details { margin-top: 36px; border: 1px solid var(--line); border-radius: 4px; padding: 12px 16px; }
+summary { cursor: pointer; font-size: 16px; font-weight: 700; color: var(--ink); }
+summary::marker { color: var(--muted); }
+details h3 { color: var(--ink); font-size: 14px; margin: 14px 0 6px; }
+details ul { color: var(--muted); }
+
+.notice { margin-top: 34px; padding: 18px 20px; border-radius: 4px; border: 1px solid var(--line); background: var(--soft); }
+.notice h2 { margin: 0 0 10px; font-size: 18px; color: var(--ink); }
+.notice ul { color: var(--muted); font-size: 12px; }
+.notice li + li { margin-top: 7px; }
+
+.footer-line { display: flex; align-items: center; gap: 16px; margin-top: 44px; color: var(--muted); font-size: 12.5px; font-weight: 700; letter-spacing: .06em; white-space: nowrap; }
+.footer-line::before, .footer-line::after { content: ""; height: 1px; background: var(--line); flex: 1 1 auto; }
+
 @media (max-width: 760px) {
-  .page { width: min(100% - 24px, 1040px); padding-top: 20px; }
+  .two-col, .what-grid { grid-template-columns: 1fr; }
   .score-head { align-items: start; flex-direction: column; }
-  .score-basis { text-align: left; }
-  .conclusion-grid, .what-grid, .two-col { grid-template-columns: 1fr; }
+  .score-basis { text-align: left; max-width: none; }
   .metric-table th:nth-child(1), .metric-table th:nth-child(2) { width: auto; }
-  table { font-size: 14px; }
+  table { font-size: 13.5px; }
   th, td { padding: 10px; }
 }
 @media print {
@@ -147,6 +180,7 @@ FORBIDDEN_TEXT = (
     "核心路径",
     "推荐路径",
     "全开路径",
+    "一句话：",
 )
 
 FORBIDDEN_ABBREVIATIONS = re.compile(r"(?<![A-Za-z])(CI|LLM|PR|repo|TDD|hook|runtime)(?![A-Za-z])", re.IGNORECASE)
@@ -187,13 +221,14 @@ def user_visible_strings(data):
     values.extend(data["positioning"])
     rec = data["recommendation"]
     values.append(rec["basis"])
-    for key in ("final_conclusion", "quantitative_analysis", "use_cases", "advice"):
-        values.extend(rec[key])
+    values.extend(rec["final_conclusion"])
+    values.extend(rec["quantitative_analysis"])
+    values.append(rec["use_cases"])
+    values.append(rec["advice"])
     what = data["what"]
     values.append(what["summary"])
-    for key in ("when_to_use", "input", "dependencies", "output"):
-        item = what[key]
-        values.extend(item if isinstance(item, list) else [item])
+    for key in ("user_needs", "extra_needs", "output"):
+        values.extend(what[key])
     values.extend(what["steps"])
     values.append(data["quality_summary"])
     for row in data.get("metrics", []):
@@ -212,7 +247,7 @@ def user_visible_strings(data):
 
 
 def _validate_report(data):
-    require(data.get("schema_version") == 6, "schema_version 必须是 6")
+    require(data.get("schema_version") == 7, "schema_version 必须是 7")
     for key in ("title", "date", "scope", "positioning", "recommendation", "what", "quality_summary", "metrics", "preparation", "fit", "usage_rhythm", "sources", "unverified"):
         require(key in data, f"缺少字段：{key}")
 
@@ -230,10 +265,11 @@ def _validate_report(data):
     rec = data["recommendation"]
     for key in ("score", "label", "basis_type", "basis", "final_conclusion", "quantitative_analysis", "use_cases", "advice"):
         require(key in rec, f"recommendation 缺少字段：{key}")
-    require_list(rec["final_conclusion"], "final_conclusion")
-    require_list(rec["quantitative_analysis"], "quantitative_analysis")
-    require_list(rec["use_cases"], "use_cases")
-    require_list(rec["advice"], "advice")
+    require_list(rec["final_conclusion"], "final_conclusion", 2, 4)
+    require_list(rec["quantitative_analysis"], "quantitative_analysis", 1, 2)
+    require(isinstance(rec["use_cases"], str) and rec["use_cases"].strip(), "use_cases 必须是一句话")
+    require(not rec["use_cases"].startswith("一句话"), "适用场景不要用“一句话”这种开头词，直接写判断")
+    require(isinstance(rec["advice"], str) and rec["advice"].strip(), "advice 必须是一句话")
 
     score = float(rec["score"])
     require(0 <= score <= 10, "推荐程度必须在 0—10")
@@ -248,19 +284,19 @@ def _validate_report(data):
 
     if score < 4:
         match_word = "不匹配"
-        advice_ok = rec["advice"][0] == "不建议安装它。"
+        advice_ok = rec["advice"] == "不建议安装它。"
         advice_rule = "不建议安装它。"
     elif score < 6:
         match_word = "部分匹配"
-        advice_ok = rec["advice"][0] == "建议先试用它，再决定是否安装。"
+        advice_ok = rec["advice"] == "建议先试用它，再决定是否安装。"
         advice_rule = "建议先试用它，再决定是否安装。"
     elif score < 7.5:
         match_word = "部分匹配"
-        advice_ok = "可以安装它" in rec["advice"][0] and rec["advice"][0].startswith(("如果", "满足", "前提是"))
+        advice_ok = "可以安装它" in rec["advice"] and rec["advice"].startswith(("如果", "满足", "前提是"))
         advice_rule = "写清具体条件，并说明可以安装它"
     else:
         match_word = "匹配"
-        advice_ok = rec["advice"][0] == "建议安装它。"
+        advice_ok = rec["advice"] == "建议安装它。"
         advice_rule = "建议安装它。"
     if rec["basis_type"] == "personalized":
         expected_first = f"{display_name} {match_word}你的需求。"
@@ -269,8 +305,8 @@ def _validate_report(data):
         expected_first = f"{display_name} {target_word}这类用户。"
     first = rec["final_conclusion"][0]
     require(first == expected_first, f"{score:.1f} 分的最终结论第一句必须是“{expected_first}”")
-    require(rec["use_cases"][0].startswith(f"{display_name} 适合"), f"适用场景第一句必须以“{display_name} 适合”开头")
-    require(advice_ok, f"{score:.1f} 分的使用建议第一句必须{advice_rule}")
+    require(rec["use_cases"].startswith(f"{display_name} 适合"), f"适用场景必须以“{display_name} 适合”开头")
+    require(advice_ok, f"{score:.1f} 分的使用建议必须{advice_rule}")
 
     def require_pronoun_chain(lines, label):
         if lines and display_name in lines[0]:
@@ -279,7 +315,6 @@ def _validate_report(data):
 
     for label, lines in (
         ("最终结论", rec["final_conclusion"]),
-        ("适用场景", rec["use_cases"]),
         ("好用之处", data.get("strengths", [])),
         ("可能卡住", data.get("frictions", [])),
     ):
@@ -290,7 +325,7 @@ def _validate_report(data):
             require(display_name not in line and "它" not in line and "用户" not in line, f"{label}直接写场景短语，不写主语：{line}")
             require(not line.startswith(("适合", "不适合")), f"{label}不重复栏目名称：{line}")
 
-    conclusion_lines = data["positioning"] + rec["final_conclusion"] + rec["quantitative_analysis"] + rec["use_cases"] + rec["advice"]
+    conclusion_lines = data["positioning"] + rec["final_conclusion"] + rec["quantitative_analysis"] + [rec["use_cases"], rec["advice"]]
     require(len(conclusion_lines) == len(set(conclusion_lines)), "结论区出现完全重复的句子")
     for line in conclusion_lines:
         require("；" not in line, f"结论区禁止分号长句：{line}")
@@ -299,15 +334,17 @@ def _validate_report(data):
     what = data["what"]
     require(isinstance(what.get("summary"), str) and what["summary"].strip(), "what.summary 必须写明 Skill 身份、用途和核心执行能力")
     require(what["summary"].startswith(display_name), f"what.summary 必须以“{display_name}”开头")
-    require_list(what.get("when_to_use"), "what.when_to_use", 2, 4)
-    require_list(what.get("input"), "what.input", 2, 4)
+    require_list(what.get("user_needs"), "what.user_needs", 2, 6)
     require_list(what.get("steps"), "what.steps", 3, 5)
-    require_list(what.get("dependencies"), "what.dependencies", 2, 4)
+    require_list(what.get("extra_needs"), "what.extra_needs", 2, 4)
     require_list(what.get("output"), "what.output", 2, 4)
-    for key in ("when_to_use", "input", "steps", "dependencies", "output"):
+    for key in ("user_needs", "steps", "extra_needs", "output"):
         for line in what[key]:
             require(len(line) <= 35, f"{key} 单条超过 35 字，请拆短：{line}")
     require(isinstance(data["quality_summary"], str) and data["quality_summary"].strip(), "quality_summary 必须概括完成度、优势和最大门槛")
+    completeness_index = data["quality_summary"].find("完整度")
+    usability_index = data["quality_summary"].find("好用度")
+    require(completeness_index >= 0 and usability_index > completeness_index, "quality_summary 必须按“完整度→好用度→优势和不足哪个权重更大”的顺序写")
 
     prep_names = [row.get("name") for row in data["preparation"]]
     require(prep_names == PREPARATION_NAMES, "安装准备必须使用固定四项，并保持顺序")
@@ -380,64 +417,43 @@ def validate_report(data):
 
 
 DEFAULT_PALETTE = {
-    "ink": "#294C46",
-    "body_text": "#101417",
-    "accent": "#E64B3C",
-    "teal": "#58A08C",
-    "paper": "#F6F1E7",
+    "paper": "#FFFFFF",
+    "ink": "#17181A",
+    "muted": "#676C74",
+    "line": "#E3E5E8",
+    "soft": "#F5F6F7",
+    "red": "#B73F42",
+    "blue": "#244C66",
+    "amber": "#D6A553",
+    "green": "#82B29B",
 }
 
-SCALE_COLORS = [
-    "#F4EDE8", "#F0DCD0", "#EBCBC0", "#E7BAA8", "#E2A990",
-    "#DE9878", "#D98760", "#D57648", "#DD6535", "#E64B3C",
-]
+SECTION_COLORS = ["c-blue", "c-green", "c-amber", "c-red", "c-blue"]
 
-
-def hex_rgb(value):
-    value = value.lstrip("#")
-    return tuple(int(value[index:index + 2], 16) for index in (0, 2, 4))
-
-
-def rgba(value, alpha):
-    red, green, blue = hex_rgb(value)
-    return f"rgba({red}, {green}, {blue}, {alpha})"
+_EST_NOTE_RE = re.compile(r"(｜(?:根据|按)[^｜]*)$")
 
 
 def palette_css():
     palette = DEFAULT_PALETTE
     return """:root {{
-  --ink: {ink};
-  --body-text: {body_text};
-  --gold: {accent};
-  --accent-text: {accent};
-  --teal: {teal};
   --paper: {paper};
+  --ink: {ink};
+  --muted: {muted};
   --line: {line};
-  --soft-ink: {soft_ink};
-  --soft-gold: {soft_gold};
-  --soft-teal: {soft_teal};
+  --soft: {soft};
+  --red: {red};
+  --blue: {blue};
+  --amber: {amber};
+  --green: {green};
 }}
-""".format(
-        ink=palette["ink"],
-        body_text=palette["body_text"],
-        accent=palette["accent"],
-        teal=palette["teal"],
-        paper=palette["paper"],
-        line=rgba(palette["teal"], .35),
-        soft_ink=rgba(palette["ink"], .08),
-        soft_gold=rgba(palette["accent"], .10),
-        soft_teal=rgba(palette["teal"], .12),
-    )
+""".format(**palette)
 
 
 def render_scale(score):
     segments = []
     for index in range(10):
         fill = max(0.0, min(1.0, score - index))
-        color = SCALE_COLORS[index]
-        segments.append(
-            f'<span class="scale-segment"><i class="scale-fill" style="width:{fill * 100:.0f}%;background:{color}"></i></span>'
-        )
+        segments.append(f'<span class="scale-segment"><i class="scale-fill" style="width:{fill * 100:.0f}%"></i></span>')
     return "".join(segments)
 
 
@@ -448,6 +464,24 @@ def render_list(items, ordered=False, css_class=""):
     return f"<{tag}{cls}>" + "".join(f"<li>{e(item)}</li>" for item in values) + f"</{tag}>"
 
 
+def render_paragraph(value):
+    if isinstance(value, list):
+        text = "".join(str(item) for item in value if item)
+    else:
+        text = str(value or "")
+    return f"<p>{e(text)}</p>"
+
+
+def render_metric_result(value):
+    text = str(value or "未验证")
+    match = _EST_NOTE_RE.search(text)
+    if match:
+        main = text[:match.start()]
+        note = match.group(1)
+        return f'{e(main)}<span class="est-note">{e(note)}</span>'
+    return e(text)
+
+
 def render_report(data):
     validate_report(data)
     rec = data["recommendation"]
@@ -456,19 +490,18 @@ def render_report(data):
     score = max(0.0, min(10.0, float(rec["score"])))
     scale_html = render_scale(score)
     positioning_html = "".join(f"<span>{e(line)}</span>" for line in data["positioning"])
-    conclusion_cards = [
+    conclusion_blocks = [
         ("最终结论", rec["final_conclusion"]),
         ("量化分析", rec["quantitative_analysis"]),
         ("适用场景", rec["use_cases"]),
-        ("使用建议", rec["advice"]),
     ]
     conclusion_html = "".join(
-        f'<div class="conclusion-card"><h3>{e(title)}</h3>{render_list(items)}</div>'
-        for title, items in conclusion_cards
+        f'<div class="conclusion-block"><h3>{e(title)}</h3>{render_paragraph(items)}</div>'
+        for title, items in conclusion_blocks
     )
 
     metrics_html = "".join(
-        f"<tr><td>{e(row['name'])}</td><td>{e(row['result'])}</td><td>{e(row['meaning'])}</td></tr>"
+        f"<tr><td>{e(row['name'])}</td><td>{render_metric_result(row['result'])}</td><td>{e(row['meaning'])}</td></tr>"
         for row in data.get("metrics", [])
         if not (row.get("name") == "下载量" and not row.get("result"))
     )
@@ -479,65 +512,68 @@ def render_report(data):
     )
 
     sources_html = "".join(
-        f'<li><a href="{e(row["url"])}" target="_blank" rel="noreferrer">{e(row["name"])}</a></li>'
+        f'<li><a href="{e(row["url"])}" target="_blank" rel="noreferrer noopener">{e(row["name"])}</a></li>'
         for row in data.get("sources", [])
     ) or "<li>未列出公开来源</li>"
 
     unverified_html = render_list(data.get("unverified"))
-    fit_verdict = e(rec["final_conclusion"][0] + rec["advice"][0])
+    fit_verdict = e(rec["final_conclusion"][0] + rec["advice"])
+
+    def section_title(index, text):
+        color_class = SECTION_COLORS[index - 1]
+        return f'<h2 class="section-title {color_class}"><span class="num">{index}</span>{e(text)}</h2>'
 
     return f"""<!doctype html>
 <html lang="zh-CN">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{e(data['title'])} · 黑曜生漆</title>
+  <title>{e(data['title'])} · {STYLE_NAME}</title>
   <style>{palette_css()}{CSS}</style>
 </head>
 <body>
 <main class="page">
   <header class="hero">
     <p class="eyebrow">啥好用 · SKILL 安装前说明书</p>
-    <h1><span class="title-red">{e(data['title'].split('｜', 1)[0])}</span><span class="title-teal">｜{e(data['title'].split('｜', 1)[1] if '｜' in data['title'] else '啥好用评估')}</span></h1>
+    <h1><span class="title-red">{e(data['title'].split('｜', 1)[0])}</span><span class="title-neutral">｜{e(data['title'].split('｜', 1)[1] if '｜' in data['title'] else '啥好用评估')}</span></h1>
     <div class="meta"><span>评估日期：{e(data['date'])}</span><span>评估范围：{e(data['scope'])}</span></div>
     <div class="positioning">{positioning_html}</div>
   </header>
 
   <section class="section">
-    <h2 class="section-title">1. 结论概述</h2>
-    <div class="score-head"><div class="score-value"><span class="score-red">{score:.1f}/10</span><span class="score-teal">｜{e(rec['label'])}</span></div><div class="score-basis">{e(rec['basis'])}</div></div>
+    {section_title(1, "结论概述")}
+    <div class="score-head"><div class="score-value"><span class="score-num">{score:.1f}/10</span><span class="score-label">｜{e(rec['label'])}</span></div><div class="score-basis">{e(rec['basis'])}</div></div>
     <div class="scale">{scale_html}</div>
     <p class="scale-note"><span class="scale-explain">分数越高，越值得安装。</span>0—3.9 不推荐｜4.0—5.9 谨慎采用｜6.0—7.4 有条件推荐｜7.5—8.9 推荐｜9.0—10 强推荐</p>
-    <div class="conclusion-grid">{conclusion_html}</div>
+    <div class="conclusion-box">{conclusion_html}</div>
   </section>
 
   <section class="section">
-    <h2 class="section-title">2. 这个 Skill 是啥</h2>
-    <div class="section-summary">{e(what['summary'])}</div>
+    {section_title(2, "这个 Skill 是啥")}
+    <div class="section-summary c-green">{e(what['summary'])}</div>
     <div class="what-grid">
-      <div class="card"><h3>使用时机</h3>{render_list(what['when_to_use'])}</div>
-      <div class="card"><h3>用户提供</h3>{render_list(what['input'])}</div>
-      <div class="card"><h3>任务步骤</h3>{render_list(what.get('steps'), ordered=True)}</div>
-      <div class="card"><h3>额外需要</h3>{render_list(what['dependencies'])}</div>
-      <div class="card"><h3>最后交付</h3>{render_list(what['output'])}</div>
+      <div class="card"><h3><span class="step-no">1</span>用户需求</h3>{render_list(what['user_needs'])}</div>
+      <div class="card"><h3><span class="step-no">2</span>任务步骤</h3>{render_list(what.get('steps'), ordered=True)}</div>
+      <div class="card"><h3><span class="step-no">3</span>额外需要</h3>{render_list(what['extra_needs'])}</div>
+      <div class="card"><h3><span class="step-no">4</span>最后交付</h3>{render_list(what['output'])}</div>
     </div>
   </section>
 
   <section class="section">
-    <h2 class="section-title">3. 这个 Skill 好用吗</h2>
-    <div class="section-summary">{e(data['quality_summary'])}</div>
+    {section_title(3, "这个 Skill 好用吗")}
+    <div class="section-summary c-amber">{e(data['quality_summary'])}</div>
     <div class="two-col">
       <div class="plain-box"><h3>好用之处</h3>{render_list(data.get('strengths'))}</div>
       <div class="plain-box"><h3>可能卡住</h3>{render_list(data.get('frictions'))}</div>
     </div>
-    <h3>指标分析</h3>
+    <h3 class="sub-h">指标分析</h3>
     <table class="metric-table"><thead><tr><th>主要指标</th><th>评估结果</th><th>用户影响</th></tr></thead><tbody>{metrics_html}</tbody></table>
-    <h3>安装准备</h3>
+    <h3 class="sub-h">安装准备</h3>
     <table><thead><tr><th>前期准备</th><th>是否必须</th><th>用户影响</th></tr></thead><tbody>{prep_html}</tbody></table>
   </section>
 
   <section class="section">
-    <h2 class="section-title">4. 这个 Skill 适合你吗</h2>
+    {section_title(4, "这个 Skill 适合你吗")}
     <div class="fit-verdict">{fit_verdict}</div>
     <div class="two-col">
       <div class="plain-box"><h3>适合场景</h3>{render_list(fit.get('good_for'))}</div>
@@ -546,7 +582,7 @@ def render_report(data):
   </section>
 
   <section class="section">
-    <h2 class="section-title">5. 使用节奏建议</h2>
+    {section_title(5, "使用节奏建议")}
     {render_list(data.get('usage_rhythm'), ordered=True, css_class='steps')}
   </section>
 
@@ -556,7 +592,7 @@ def render_report(data):
     <h2>说明</h2>
     <ul>
       <li>本报告中的 AI agent，指能够读取 Skill、理解任务，并按规则调用电脑软件或联网服务完成工作的 AI 助手，例如 Codex、Claude Code、Cursor Agent 等。它能否执行命令、联网或调用工具，取决于具体产品和用户授予的权限。</li>
-      <li>本报告依据公开文件完成，不代表已经安装、运行或长期使用；真实兼容性、稳定性、价格和输出质量可能不同。</li>
+      <li>除非正文明确标注为本机实测，本报告主要依据公开文件与只读检查完成；正文未记录的安装、运行、长期兼容性、稳定性、价格和输出质量均未验证。</li>
       <li>“啥好用”不能替代专业评测，包括代码安全审计、恶意代码检测、软件质量与兼容性测试、隐私合规审查、许可证审查或法律意见。</li>
       <li>下载或使用前，请核对官方来源、依赖、权限、数据去向、收费和许可证，并注意安全风险。</li>
       <li>请勿在对话或报告中粘贴 API Key、Cookie、Token、密码等凭证；优先使用测试环境、最小权限、专用账号和可恢复备份。</li>
@@ -609,7 +645,7 @@ def safe_name(value):
 def report_skeleton(skill_name):
     name = safe_name(skill_name)
     return {
-        "schema_version": 6,
+        "schema_version": 7,
         "output_name": f"{name}_啥好用评估_CO.html",
         "title": f"{name}｜啥好用评估",
         "date": date.today().isoformat(),
@@ -621,19 +657,18 @@ def report_skeleton(skill_name):
             "basis_type": "target",
             "basis": f"判断对象：{PLACEHOLDER}",
             "final_conclusion": [f"{name} 部分适合这类用户。", f"{name} {PLACEHOLDER}。", f"用户需要注意{PLACEHOLDER}。"],
-            "quantitative_analysis": [f"公开关注度为{PLACEHOLDER}。", f"安装复杂度得分为{PLACEHOLDER}。", f"Token 消耗得分为{PLACEHOLDER}。"],
-            "use_cases": [f"{name} 适合{PLACEHOLDER}。", f"用户可以用它完成{PLACEHOLDER}。", f"最终用户可以得到{PLACEHOLDER}。"],
-            "advice": ["建议先试用它，再决定是否安装。", f"用户可以先试{PLACEHOLDER}。", f"出现{PLACEHOLDER}时停止使用。"],
+            "quantitative_analysis": [f"这次得分主要由{PLACEHOLDER}这 1—2 个数字决定。"],
+            "use_cases": f"{name} 适合{PLACEHOLDER}的用户，用来{PLACEHOLDER}。",
+            "advice": "建议先试用它，再决定是否安装。",
         },
         "what": {
-            "summary": f"{name} 是{PLACEHOLDER}，主要用来{PLACEHOLDER}。",
-            "when_to_use": [f"用户已有{PLACEHOLDER}", f"用户希望{PLACEHOLDER}"],
-            "input": [f"用户提供{PLACEHOLDER}", f"用户说明{PLACEHOLDER}"],
+            "summary": f"{name} 用{PLACEHOLDER}机制，展开{PLACEHOLDER}的工作，实现{PLACEHOLDER}的效果。",
+            "user_needs": [f"用户已有{PLACEHOLDER}", f"用户希望{PLACEHOLDER}"],
             "steps": [f"确认{PLACEHOLDER}", f"处理{PLACEHOLDER}", f"交付{PLACEHOLDER}"],
-            "dependencies": [f"用户需要{PLACEHOLDER}", f"{name} 还会调用{PLACEHOLDER}"],
+            "extra_needs": [f"除 AI agent 本身外，用户还需要{PLACEHOLDER}", f"{name} 还会调用{PLACEHOLDER}"],
             "output": [f"用户可以得到{PLACEHOLDER}", f"用户可以继续{PLACEHOLDER}"],
         },
-        "quality_summary": f"整体完成度{PLACEHOLDER}。主要优势是{PLACEHOLDER}。最大门槛是{PLACEHOLDER}。",
+        "quality_summary": f"完整度{PLACEHOLDER}。好用度{PLACEHOLDER}。优势和不足相比，{PLACEHOLDER}的权重更大。",
         "metrics": [
             {"name": "公开关注度", "result": PLACEHOLDER, "meaning": PLACEHOLDER},
             {"name": "安装复杂度", "result": PLACEHOLDER, "meaning": PLACEHOLDER},
@@ -713,7 +748,7 @@ def default_output(input_json, payload):
 def check_html(path):
     html = Path(path).read_text(encoding="utf-8")
     issues = []
-    if html.count('class="section-title"') != 5:
+    if len(re.findall(r'class="section-title\b', html)) != 5:
         issues.append("HTML 必须包含 5 个固定章节")
     if html.count('class="scale-segment"') != 10:
         issues.append("推荐条必须包含 10 个色块")
@@ -727,12 +762,16 @@ def check_html(path):
         issues.append("HTML 缺少底部封线")
     if "啥好用skill•盒小Feier" not in html:
         issues.append("HTML 缺少底部固定署名")
-    for color in ("#294C46", "#101417", "#E64B3C", "#58A08C", "#F6F1E7"):
+    for color in DEFAULT_PALETTE.values():
         if color not in html:
-            issues.append(f"HTML 缺少黑曜生漆固定色：{color}")
-    for css_class in ("title-red", "title-teal", "score-red", "score-teal"):
-        if f'class="{css_class}"' not in html:
-            issues.append(f"HTML 缺少黑曜生漆分色元素：{css_class}")
+            issues.append(f"HTML 缺少{STYLE_NAME}固定色：{color}")
+    for css_class in ("title-red", "title-neutral", "score-num", "score-label", "c-blue", "c-green", "c-amber", "c-red"):
+        if css_class not in html:
+            issues.append(f"HTML 缺少{STYLE_NAME}分色元素：{css_class}")
+    if 'class="conclusion-box"' not in html:
+        issues.append("HTML 结论概述必须是单框三段结构")
+    if len(re.findall(r'class="card"', html)) != 4:
+        issues.append("HTML “这个 Skill 是啥”必须是 4 张信息卡")
     for name in PREPARATION_NAMES:
         if name not in html:
             issues.append(f"HTML 安装准备缺少：{name}")
