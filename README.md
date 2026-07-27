@@ -134,14 +134,6 @@ sha-hao-yong/
 ├── scripts/
 │   └── render_report.py
 └── examples/                          # 完整的评估示例：过程 JSON + 生成的 HTML
-    ├── hv-analysis_首次_CO/
-    │   ├── hv-analysis_啥好用评估_CO.html
-    │   └── 过程文件_CO/
-    │       └── hv-analysis_啥好用评估_过程_CO.json
-    ├── Agent Reach_首次_CO/
-    │   ├── Agent Reach_啥好用评估_CO.html
-    │   └── 过程文件_CO/
-    │       └── Agent Reach_啥好用评估_过程_CO.json
     └── 啥好用 Skill_首次_CO/            # 啥好用对自己的自评
         ├── 啥好用 Skill_啥好用评估_CO.html
         └── 过程文件_CO/
