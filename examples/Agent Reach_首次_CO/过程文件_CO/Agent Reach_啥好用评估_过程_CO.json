@@ -1,0 +1,235 @@
+{
+  "schema_version": 13,
+  "output_name": "Agent Reach_啥好用评估_CO.html",
+  "title": "Agent Reach｜啥好用评估",
+  "date": "2026-07-26",
+  "assessment_context": {
+    "audience_mode": "personalized",
+    "audience": "搜索AI行业信息的用户",
+    "public_materials": [
+      "Agent Reach GitHub 项目 README",
+      "SKILL.md 使用指南",
+      "references/*.md 分类文档",
+      "GitHub 项目公开元数据（Stars/Forks/Issues/Releases）"
+    ]
+  },
+  "benchmark_task": {
+    "version": "1",
+    "goal": "让 AI agent 完成一次公开信息检索并拿到可读结果",
+    "input": "用户给一句自然语言检索需求",
+    "workload": "1 次体检确认可用后端，加 1 次默认渠道调用（Exa 网页搜索，返回约 5 条结果），再汇总成文字",
+    "output": "带标题、链接、发布时间的检索结果文本",
+    "source": "README「快速上手」零配置命令示例与 SKILL.md「常驻规则」描述的默认单次检索流程",
+    "changed": false,
+    "change_reason": ""
+  },
+  "positioning": [
+    "Agent Reach 是给 AI agent 装上互联网检索能力的路由器。",
+    "它主要基于 Exa 语义搜索这一免费联网服务，通过体检命令自动路由到对应平台的命令行工具完成检索。",
+    "最终用户可以得到带标题、链接和发布时间的检索结果文本。",
+    "经评估，Agent Reach 更适合经常需要联网检索AI行业信息的用户。"
+  ],
+  "recommendation": {
+    "quality": {
+      "dimensions": {
+        "risk": {"raw10": 1.0, "reason": "固定常规任务只发送搜索关键词和网页链接，不涉及账号、Cookie 或写操作；官方说明 Cookie 只存本地不上传，代码开源可审查"},
+        "popularity": {"score": 2.0, "reason": "GitHub 项目有 60,918 星标、4,940 次复刻，明显领先同类项目，5 个月内发布 7 个正式版本，最近一次代码更新在 2026-07-25，仍在快速增长"},
+        "install_complexity": {"raw10": 3.3, "reason": "从零安装：复制一句话给 AI agent，它会自动装好 agent-reach 命令行工具，以及 Node.js、gh CLI、mcporter 等好几个系统级组件；只用免登录的零配置渠道基本装完即用，想覆盖小红书、Twitter 等社交平台还要额外装一次 OpenCLI 浏览器插件并登录"},
+        "verifiability": {"score": 2.0, "reason": "README 和 SKILL.md 文档写得很详细，项目主动记录接入方式变化并及时切换后端（比如 2026-06 yt-dlp 被B站风控封死后已经切换到 bili-cli，用户无感），维护活跃"},
+        "task_complexity": {"raw10": 1.5, "reason": "固定常规任务：用户给一句检索需求，AI agent 自动体检、调用 Exa 搜索等工具并整理结果，不需要用户切换工具或反复确认"},
+        "extra_cost": {"score": 1.5, "reason": "MIT 许可证，固定常规任务用到的 Exa 搜索免费且不需要 Key；只有部署到服务器上做社交媒体抓取时，才可能需要约 1 美元/月的代理费用"},
+        "token_usage": {"raw10": 1.5, "reason": "固定常规任务：1 次体检加 1 次 Exa 搜索返回约 5 条结果，一两千字，AI agent 读取并摘要即可，不需要多轮往返"},
+        "invocation_accuracy": {"score": 1.0, "reason": "description 写明“搜/查/找”这类很常见的词都会触发它，用户说“帮我在电脑上找个文件”这种本地任务时也可能被它接住"}
+      }
+    },
+    "match": {
+      "goal_fit": {"score": 8.5, "reason": "假设完整安装配置，Agent Reach 的全网搜索、GitHub 搜索加上 YouTube/B站字幕，能覆盖查AI行业新闻、开源项目和技术讨论的核心需求；次要缺口是社区讨论类信息（小红书、Twitter、Reddit）还需要额外配置才能解锁"},
+      "deliverable_fit": {"score": 7.5, "reason": "结果带标题、链接和发布时间，能直接核对来源；但只是原始检索结果，不是整理好的成品报告，需要用户自己进一步加工"}
+    },
+    "final_conclusion": [
+      "Agent Reach 匹配你的需求，适合搜索AI行业新闻、开源项目和技术讨论。",
+      "它的能力基础是 Exa 免费语义搜索服务，加上按平台路由到对应命令行工具完成检索。",
+      "它的核心优势是核心渠道零配置、一句话自动安装，还自带体检命令随时看清哪个平台能用。",
+      "它的不足是想覆盖小红书、Twitter 这类社区讨论，还需要额外装 OpenCLI 插件并登录。"
+    ],
+    "quantitative_analysis": [
+      "好用度 8.4/10，核心免费、风险低、任务简单，安装时会自动装好几个系统组件，扩展社交平台还要多装一步。",
+      "适合度 8.2/10，它的全网搜索和技术社区检索跟你查AI行业信息的需求很贴合，结果能直接核对来源，但社区讨论类信息要多配置一步才能覆盖到。"
+    ],
+    "advice": "建议安装"
+  },
+  "what": {
+    "summary": "Agent Reach 是一个给 AI agent 装上互联网检索能力的 skill，主要依赖 Exa 免费语义搜索服务和按平台路由的命令行工具（YouTube、B站、GitHub、RSS 等），通过体检命令自动判断每个平台当前能用哪个后端完成检索，主要服务经常需要联网查AI行业新闻、开源项目和技术讨论的用户。",
+    "usage": [
+      "想查AI行业新闻、开源项目或技术讨论时可以用",
+      "想读网页、看视频字幕或订阅RSS也能用",
+      "给一句检索需求即可，比如搜索关键词或话题",
+      "可选说明想覆盖的具体平台"
+    ],
+    "steps": [
+      "先跑体检命令，确认每个平台当前用哪个后端",
+      "调用Exa搜索或对应平台命令行工具检索",
+      "多平台任务并行收集，再汇总成一份文本",
+      "遇到失败按文档里的重试步骤换一条路径"
+    ],
+    "extra_needs": [
+      "除 AI agent 本身外，核心渠道不需要注册或付费",
+      "想覆盖小红书、Twitter等平台需装插件并登录",
+      "想用播客转录功能，需要申请免费转录Key"
+    ],
+    "output": [
+      "带标题、链接和发布时间的检索结果文本",
+      "可以直接核对来源，或用于写报告和调研笔记"
+    ]
+  },
+  "quality_summary": "完整度高，核心检索渠道有据可查、说明清楚，项目本身活跃维护、持续换代避免接入失效。好用度较高，安装时会自动装好几个系统组件，扩展到社交平台还要多装一步插件。优势和不足相比，优势的权重更大，主要门槛是覆盖中文社区讨论时需要额外配置。",
+  "metrics": [
+    {
+      "name": "公开关注度",
+      "result": "高关注",
+      "meaning": "GitHub 项目有 60,918 星标、4,940 次复刻，5 个月内发布 7 个正式版本，最近一次代码更新在 2026-07-25，当前有 169 个公开未解决的问题，星标增长速度快。"
+    },
+    {
+      "name": "可验证性",
+      "result": "充分",
+      "meaning": "README 和 SKILL.md 文档写得很详细，项目主动记录接入方式变化并及时切换后端（比如 2026-06 yt-dlp 被B站风控封死后已经切换到 bili-cli，用户无感），维护活跃。"
+    },
+    {
+      "name": "安装复杂度",
+      "result": "中等",
+      "meaning": "从零安装：复制一句话给 AI agent，它会自动装好 agent-reach 命令行工具，以及 Node.js、gh CLI、mcporter 等基础组件；只用免登录的零配置渠道基本装完即用，想覆盖小红书、Twitter 等社交平台还需要额外装一次 OpenCLI 浏览器插件并登录。"
+    },
+    {
+      "name": "任务复杂度",
+      "result": "很简单",
+      "meaning": "固定常规任务：给一句检索需求，AI agent 自动体检、调用 Exa 搜索并整理结果，不需要切换工具或反复确认。"
+    },
+    {
+      "name": "Skill 调用准确性",
+      "result": "偏宽",
+      "meaning": "根据名称、描述和触发规则判断：description 写明“搜/查/找”这类很常见的词都会触发它，用户说“帮我在电脑上找个文件”这种本地任务时也可能被它接住。"
+    },
+    {
+      "name": "额外涉及费用",
+      "result": "核心免费，扩展功能可能付费",
+      "meaning": "MIT 许可证，固定常规任务用到的 Exa 搜索免费且不需要 Key；只有部署到服务器上做社交媒体抓取时，才可能需要约 1 美元/月的代理费用。"
+    },
+    {
+      "name": "Token 消耗",
+      "result": "低",
+      "meaning": "固定常规任务：1 次体检加 1 次 Exa 搜索返回约 5 条结果，一两千字，AI agent 读取并摘要即可，不需要多轮往返。"
+    },
+    {
+      "name": "风险值",
+      "result": "低",
+      "meaning": "固定常规任务只发送搜索关键词和网页链接，不涉及账号、Cookie 或写操作；官方说明 Cookie 只存本地不上传，代码开源可审查。"
+    }
+  ],
+  "strengths": [
+    "Agent Reach 的核心搜索和网页阅读零配置，一句话装好就能用。",
+    "它自带体检命令，能实时告诉你每个平台当前是否可用、走的哪条路。",
+    "项目团队持续追踪各平台接口变化，某个接入方式失效了会自动切换，用户不用自己盯。"
+  ],
+  "frictions": [
+    "Agent Reach 想解锁小红书、Twitter、Reddit 时需要额外装 OpenCLI 插件并登录。",
+    "它的触发词比较宽，本地文件查找类需求也可能被误判成联网检索。"
+  ],
+  "preparation": [
+    {
+      "name": "额外软件安装",
+      "required": [
+        {
+          "scope": "基础使用",
+          "status": "必须",
+          "detail": "需要 Python 和 agent-reach 命令行工具"
+        },
+        {
+          "scope": "自动安装",
+          "status": "按条件",
+          "detail": "AI agent 会配置 Node.js、gh 和 mcporter"
+        },
+        {
+          "scope": "扩展平台",
+          "status": "可选",
+          "detail": "小红书等平台还需 OpenCLI 浏览器插件"
+        }
+      ],
+      "impact": "自动安装通常几分钟完成；增加平台后还要维护扩展工具。"
+    },
+    {
+      "name": "额外注册/登录的账号",
+      "required": [
+        {
+          "scope": "基础渠道",
+          "status": "不需要",
+          "detail": "网页、GitHub 等公开来源不用登录"
+        },
+        {
+          "scope": "社交平台",
+          "status": "按条件",
+          "detail": "Twitter、Reddit、小红书等需要登录"
+        }
+      ],
+      "impact": "部分平台需要维护浏览器登录态；Twitter 还要手动导出 Cookie。"
+    },
+    {
+      "name": "API KEY/联网服务",
+      "required": [
+        {
+          "scope": "基础渠道",
+          "status": "不需要",
+          "detail": "网页搜索和公开读取无需单独申请 Key"
+        },
+        {
+          "scope": "播客转录",
+          "status": "按条件",
+          "detail": "需要申请免费的转录服务 Key"
+        }
+      ],
+      "impact": "启用播客转录前，需要申请并保管服务 Key。"
+    },
+    {
+      "name": "涉及的数据与隐私",
+      "required": [
+        {
+          "scope": "公共搜索",
+          "status": "必然涉及",
+          "detail": "搜索词和网页链接会发送给外部服务"
+        },
+        {
+          "scope": "社交平台",
+          "status": "按条件",
+          "detail": "浏览器登录态和 Cookie 会在本地使用"
+        }
+      ],
+      "impact": "扩展社交平台前，应核对登录态和 Cookie 的本地保存方式。"
+    }
+  ],
+  "fit": {
+    "good_for": [
+      "搜索AI行业新闻、模型发布和开源项目动态",
+      "查GitHub上的开源AI项目和技术讨论",
+      "用Claude Code这类能执行命令的AI agent完成检索"
+    ],
+    "not_for": [
+      "需要小红书、B站等中文社区深度舆情，且还没装OpenCLI插件的情况",
+      "需要付费专业行研数据库的深度数据",
+      "需要直接产出成品报告，而不是原始检索结果"
+    ]
+  },
+  "usage_rhythm": [
+    "第一次先用Exa搜索测一条你关心的行业新闻，看效果是否满足需求。",
+    "确认后再装OpenCLI浏览器插件并登录对应平台，解锁中文社区讨论。",
+    "出现某个平台频繁失败或登录态总掉线时停用该渠道，先按文档重试。"
+  ],
+  "sources": [
+    {"name": "Agent Reach GitHub 项目", "url": "https://github.com/Panniantong/Agent-Reach"},
+    {"name": "项目 README", "url": "https://github.com/Panniantong/Agent-Reach#readme"},
+    {"name": "SKILL.md 使用指南", "url": "https://raw.githubusercontent.com/Panniantong/agent-reach/main/agent_reach/skill/SKILL.md"}
+  ],
+  "unverified": [
+    "小红书、Twitter等登录态渠道是否存在账号封禁风险，官方文档提示但没有独立验证。",
+    "播客转录功能具体使用哪个转录服务、如何申请Key，本次未逐项确认。",
+    "下载量没有公开数值，未计入报告。"
+  ]
+}

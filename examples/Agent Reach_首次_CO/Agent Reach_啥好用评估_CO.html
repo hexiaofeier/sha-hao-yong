@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Agent Reach｜啥好用评估 · 白纸墨字</title>
+  <style>:root {
+  --paper: #FFFFFF;
+  --ink: #17181A;
+  --muted: #676C74;
+  --line: #E3E5E8;
+  --soft: #F5F6F7;
+  --red: #B73F42;
+  --blue: #244C66;
+  --amber: #D6A553;
+  --green: #82B29B;
+}
+
+* { box-sizing: border-box; }
+html { background: var(--paper); }
+body {
+  margin: 0;
+  color: var(--ink);
+  background: var(--paper);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", "PingFang SC", Arial, sans-serif;
+  font-size: 15px;
+  line-height: 1.7;
+}
+a { color: var(--ink); text-decoration-color: var(--line); text-underline-offset: 3px; }
+a:hover { text-decoration-color: currentColor; }
+.page { width: min(1040px, calc(100% - 36px)); margin: 0 auto; padding: 40px 0 60px; }
+
+.hero { border-top: 2px solid var(--ink); padding: 22px 0 22px; }
+.eyebrow { margin: 0 0 10px; font-size: 12px; font-weight: 700; letter-spacing: .16em; color: var(--muted); text-transform: uppercase; }
+h1 { margin: 0; font-size: clamp(30px, 5vw, 46px); line-height: 1.2; letter-spacing: -.02em; font-weight: 800; }
+.title-red { color: var(--red); }
+.title-neutral { color: var(--ink); font-weight: 500; }
+.meta { display: flex; flex-wrap: wrap; gap: 6px 20px; margin-top: 14px; font-size: 13px; color: var(--muted); }
+.positioning { margin: 22px 0 0; padding: 16px 20px; border-radius: 4px; border-left: 3px solid var(--blue); background: var(--soft); font-size: 16px; font-weight: 400; color: var(--ink); }
+.positioning span { display: block; }
+.positioning span + span { margin-top: 4px; }
+
+.section { margin-top: 44px; }
+.section-title { display: flex; align-items: baseline; gap: 10px; margin: 0 0 16px; font-size: 23px; line-height: 1.3; font-weight: 800; color: var(--ink); }
+.section-title .num { font-size: 15px; font-weight: 700; padding: 2px 8px; border-radius: 3px; }
+.c-blue .num { background: var(--blue); color: #fff; }
+.c-red .num { background: var(--red); color: #fff; }
+.c-green .num { background: var(--green); color: var(--ink); }
+.c-amber .num { background: var(--amber); color: var(--ink); }
+
+.section-summary { margin: 0 0 16px; padding: 12px 16px; border-left: 3px solid; background: var(--soft); font-weight: 400; font-size: 15px; border-radius: 4px; color: var(--ink); }
+.section-summary.c-blue { border-left-color: var(--blue); }
+.section-summary.c-green { border-left-color: var(--green); }
+.section-summary.c-amber { border-left-color: var(--amber); }
+.fit-verdict { color: var(--ink); border-left: 3px solid var(--red); background: var(--soft); padding: 12px 16px; font-weight: 400; font-size: 15px; border-radius: 4px; margin: 0 0 16px; }
+
+.score-head { display: flex; align-items: end; justify-content: space-between; gap: 16px; margin: 20px 0 6px; }
+.score-value { font-size: 36px; font-weight: 850; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.score-num { color: var(--red); }
+.score-label { color: var(--ink); font-weight: 700; }
+.score-basis { color: var(--muted); font-size: 13px; text-align: right; max-width: 320px; }
+.score-hl { color: var(--red); font-weight: 800; font-size: 21px; font-variant-numeric: tabular-nums; }
+.quant-num { color: var(--red); }
+.score-line { margin: 0 0 8px; }
+.score-line + p { margin: 0; }
+.scale { display: grid; grid-template-columns: repeat(10, 1fr); gap: 3px; margin-top: 14px; height: 16px; }
+.scale-segment { min-width: 0; background: var(--soft); border: 1px solid var(--line); overflow: hidden; }
+.scale-fill { display: block; height: 100%; background: var(--red); }
+.scale-note { margin: 8px 0 0; font-size: 12px; color: var(--muted); }
+.scale-explain { display: block; margin-bottom: 2px; font-weight: 700; color: var(--ink); }
+
+.plain-box, .card { border-radius: 4px; border: 1px solid var(--line); border-left-width: 3px; background: #fff; padding: 16px 18px; }
+.plain-box h3, .card h3 { margin: 0 0 9px; font-size: 15px; color: var(--ink); font-weight: 800; }
+.plain-box ul, .card ul, .card ol { padding-left: 1.1em; color: var(--ink); }
+.plain-box li, .card li { color: var(--ink); }
+
+.conclusion-box { margin-top: 20px; border-radius: 4px; border: 1px solid var(--line); border-left: 3px solid var(--blue); background: #fff; padding: 4px 20px; }
+.conclusion-block { padding: 16px 0; }
+.conclusion-block + .conclusion-block { border-top: 1px dashed var(--line); }
+.conclusion-block h3 { margin: 0 0 9px; font-size: 15px; font-weight: 800; color: var(--ink); }
+.conclusion-block p { margin: 0; color: var(--ink); }
+
+table { width: 100%; border-collapse: separate; border-spacing: 0; border: 1px solid var(--line); border-radius: 4px; overflow: hidden; }
+th, td { padding: 12px 14px; border-top: 1px solid var(--line); border-left: 1px solid var(--line); vertical-align: top; text-align: left; color: var(--ink); }
+tr:first-child th, tr:first-child td { border-top: 0; }
+th:first-child, td:first-child { border-left: 0; }
+th { background: var(--soft); font-size: 15px; font-weight: 800; color: var(--ink); text-align: center; }
+.metric-table th:nth-child(1) { width: 160px; }
+.metric-table th:nth-child(2) { width: 160px; }
+.metric-table td:nth-child(1), .metric-table td:nth-child(2) { text-align: center; }
+.metric-table td:nth-child(2) { color: var(--red); font-weight: 700; }
+.metric-table td:nth-child(2) .est-note { color: var(--ink); font-weight: 400; }
+.prep-table { table-layout: fixed; }
+.prep-table th:nth-child(1) { width: 200px; }
+.prep-table th:nth-child(2), .prep-table th:nth-child(3) { width: calc((100% - 200px) / 2); }
+.prep-table td:nth-child(1) { white-space: nowrap; text-align: center; }
+.prep-required-list { margin: 0; padding-left: 1.15em; }
+.prep-required-list li { padding-left: .1em; }
+.prep-required-list .prep-status { font-weight: 800; }
+.prep-required-list .prep-detail { font-weight: 400; }
+h3.sub-h { margin: 30px 0 12px; font-size: 17px; color: var(--ink); font-weight: 800; }
+
+ul, ol { margin: 0; padding-left: 1.25em; }
+li + li { margin-top: 5px; }
+
+.what-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 4px; }
+.what-grid .card { border-left-color: var(--green); }
+.what-grid .card h3 { display: flex; align-items: center; gap: 8px; }
+.what-grid .card h3 .step-no { display: inline-grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; background: var(--green); color: var(--ink); font-size: 12px; font-weight: 800; flex: 0 0 auto; }
+
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 14px 0; }
+
+.steps { counter-reset: step; list-style: none; padding: 0; display: grid; gap: 10px; }
+.steps li { display: grid; grid-template-columns: 30px 1fr; gap: 11px; align-items: start; margin: 0; color: var(--ink); }
+.steps li::before { counter-increment: step; content: counter(step); display: grid; place-items: center; width: 26px; height: 26px; border-radius: 4px; background: var(--soft); border: 1px solid var(--line); color: var(--ink); font-weight: 800; font-size: 13px; }
+
+details { margin-top: 36px; border: 1px solid var(--line); border-radius: 4px; padding: 12px 16px; }
+summary { cursor: pointer; font-size: 16px; font-weight: 700; color: var(--ink); }
+summary::marker { color: var(--muted); }
+details h3 { color: var(--ink); font-size: 14px; margin: 14px 0 6px; }
+details ul { color: var(--muted); }
+
+.notice { margin-top: 34px; padding: 18px 20px; border-radius: 4px; border: 1px solid var(--line); background: var(--soft); }
+.notice h2 { margin: 0 0 10px; font-size: 18px; color: var(--ink); }
+.notice ul { color: var(--muted); font-size: 12px; }
+.notice li + li { margin-top: 7px; }
+
+.footer-line { display: flex; align-items: center; gap: 16px; margin-top: 44px; color: var(--muted); font-size: 12.5px; font-weight: 700; letter-spacing: .06em; white-space: nowrap; }
+.footer-line::before, .footer-line::after { content: ""; height: 1px; background: var(--line); flex: 1 1 auto; }
+
+@media (max-width: 760px) {
+  .two-col, .what-grid { grid-template-columns: 1fr; }
+  .score-head { align-items: start; flex-direction: column; }
+  .score-basis { text-align: left; max-width: none; }
+  .metric-table th:nth-child(1), .metric-table th:nth-child(2) { width: auto; }
+  .prep-table { table-layout: auto; }
+  .prep-table th:nth-child(1), .prep-table th:nth-child(2), .prep-table th:nth-child(3) { width: auto; }
+  .prep-table td:nth-child(1) { white-space: normal; }
+  table { font-size: 13.5px; }
+  th, td { padding: 10px; }
+}
+@media print {
+  .page { width: 100%; padding: 0; }
+  .section { break-inside: avoid; }
+  details { break-inside: avoid; }
+  a { text-decoration: none; }
+}
+</style>
+</head>
+<body>
+<main class="page">
+  <header class="hero">
+    <p class="eyebrow">啥好用 · SKILL 安装前说明书</p>
+    <h1><span class="title-red">Agent Reach</span><span class="title-neutral">｜啥好用评估</span></h1>
+    <div class="meta"><span>评估日期：2026-07-26</span><span>评估范围：只读检查Agent Reach GitHub 项目 README、SKILL.md 使用指南、references/*.md 分类文档、GitHub 项目公开元数据（Stars/Forks/Issues/Releases）。</span></div>
+    <div class="positioning"><span>Agent Reach 是给 AI agent 装上互联网检索能力的路由器。</span><span>它主要基于 Exa 语义搜索这一免费联网服务，通过体检命令自动路由到对应平台的命令行工具完成检索。</span><span>最终用户可以得到带标题、链接和发布时间的检索结果文本。</span><span>经评估，Agent Reach 更适合经常需要联网检索AI行业信息的用户。</span></div>
+  </header>
+
+  <section class="section">
+    <h2 class="section-title c-blue"><span class="num">1</span>结论概述</h2>
+    <div class="score-head"><div class="score-value"><span class="score-num">8.3/10</span><span class="score-label">｜推荐</span></div><div class="score-basis">根据搜索AI行业信息的用户判断。</div></div>
+    <div class="scale"><span class="scale-segment"><i class="scale-fill" style="width:100%"></i></span><span class="scale-segment"><i class="scale-fill" style="width:100%"></i></span><span class="scale-segment"><i class="scale-fill" style="width:100%"></i></span><span class="scale-segment"><i class="scale-fill" style="width:100%"></i></span><span class="scale-segment"><i class="scale-fill" style="width:100%"></i></span><span class="scale-segment"><i class="scale-fill" style="width:100%"></i></span><span class="scale-segment"><i class="scale-fill" style="width:100%"></i></span><span class="scale-segment"><i class="scale-fill" style="width:100%"></i></span><span class="scale-segment"><i class="scale-fill" style="width:30%"></i></span><span class="scale-segment"><i class="scale-fill" style="width:0%"></i></span></div>
+    <p class="scale-note"><span class="scale-explain">分数越高，越值得安装。</span>0—3.9 不推荐｜4.0—5.9 谨慎采用｜6.0—7.4 有条件推荐｜7.5—8.9 推荐｜9.0—10 强推荐</p>
+    <div class="conclusion-box"><div class="conclusion-block"><h3>最终结论</h3><p>Agent Reach 匹配你的需求，适合搜索AI行业新闻、开源项目和技术讨论。</p><p>它的能力基础是 Exa 免费语义搜索服务，加上按平台路由到对应命令行工具完成检索。</p><p>它的核心优势是核心渠道零配置、一句话自动安装，还自带体检命令随时看清哪个平台能用。</p><p>它的不足是想覆盖小红书、Twitter 这类社区讨论，还需要额外装 OpenCLI 插件并登录。</p></div><div class="conclusion-block"><h3>量化分析</h3><p>好用度 <span class="quant-num">8.4/10</span>，核心免费、风险低、任务简单，安装时会自动装好几个系统组件，扩展社交平台还要多装一步。</p><p>适合度 <span class="quant-num">8.2/10</span>，它的全网搜索和技术社区检索跟你查AI行业信息的需求很贴合，结果能直接核对来源，但社区讨论类信息要多配置一步才能覆盖到。</p></div></div>
+  </section>
+
+  <section class="section">
+    <h2 class="section-title c-green"><span class="num">2</span>这个 Skill 是啥</h2>
+    <div class="section-summary c-green">Agent Reach 是一个给 AI agent 装上互联网检索能力的 skill，主要依赖 Exa 免费语义搜索服务和按平台路由的命令行工具（YouTube、B站、GitHub、RSS 等），通过体检命令自动判断每个平台当前能用哪个后端完成检索，主要服务经常需要联网查AI行业新闻、开源项目和技术讨论的用户。</div>
+    <div class="what-grid">
+      <div class="card"><h3><span class="step-no">1</span>使用方法</h3><ul><li>想查AI行业新闻、开源项目或技术讨论时可以用</li><li>想读网页、看视频字幕或订阅RSS也能用</li><li>给一句检索需求即可，比如搜索关键词或话题</li><li>可选说明想覆盖的具体平台</li></ul></div>
+      <div class="card"><h3><span class="step-no">2</span>任务步骤</h3><ol><li>先跑体检命令，确认每个平台当前用哪个后端</li><li>调用Exa搜索或对应平台命令行工具检索</li><li>多平台任务并行收集，再汇总成一份文本</li><li>遇到失败按文档里的重试步骤换一条路径</li></ol></div>
+      <div class="card"><h3><span class="step-no">3</span>额外需要</h3><ul><li>除 AI agent 本身外，核心渠道不需要注册或付费</li><li>想覆盖小红书、Twitter等平台需装插件并登录</li><li>想用播客转录功能，需要申请免费转录Key</li></ul></div>
+      <div class="card"><h3><span class="step-no">4</span>最后交付</h3><ul><li>带标题、链接和发布时间的检索结果文本</li><li>可以直接核对来源，或用于写报告和调研笔记</li></ul></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2 class="section-title c-amber"><span class="num">3</span>这个 Skill 好用吗</h2>
+    <div class="section-summary c-amber"><p class="score-line">好用度：<span class="score-hl">8.4/10</span></p><p>完整度高，核心检索渠道有据可查、说明清楚，项目本身活跃维护、持续换代避免接入失效。好用度较高，安装时会自动装好几个系统组件，扩展到社交平台还要多装一步插件。优势和不足相比，优势的权重更大，主要门槛是覆盖中文社区讨论时需要额外配置。</p></div>
+    <div class="two-col">
+      <div class="plain-box"><h3>好用之处</h3><ul><li>Agent Reach 的核心搜索和网页阅读零配置，一句话装好就能用。</li><li>它自带体检命令，能实时告诉你每个平台当前是否可用、走的哪条路。</li><li>项目团队持续追踪各平台接口变化，某个接入方式失效了会自动切换，用户不用自己盯。</li></ul></div>
+      <div class="plain-box"><h3>可能卡住</h3><ul><li>Agent Reach 想解锁小红书、Twitter、Reddit 时需要额外装 OpenCLI 插件并登录。</li><li>它的触发词比较宽，本地文件查找类需求也可能被误判成联网检索。</li></ul></div>
+    </div>
+    <h3 class="sub-h">指标分析</h3>
+    <table class="metric-table"><thead><tr><th>主要指标</th><th>评估结果</th><th>用户影响</th></tr></thead><tbody><tr><td>公开关注度</td><td>高关注</td><td>GitHub 项目有 60,918 星标、4,940 次复刻，5 个月内发布 7 个正式版本，最近一次代码更新在 2026-07-25，当前有 169 个公开未解决的问题，星标增长速度快。</td></tr><tr><td>可验证性</td><td>充分</td><td>README 和 SKILL.md 文档写得很详细，项目主动记录接入方式变化并及时切换后端（比如 2026-06 yt-dlp 被B站风控封死后已经切换到 bili-cli，用户无感），维护活跃。</td></tr><tr><td>安装复杂度</td><td>中等</td><td>从零安装：复制一句话给 AI agent，它会自动装好 agent-reach 命令行工具，以及 Node.js、gh CLI、mcporter 等基础组件；只用免登录的零配置渠道基本装完即用，想覆盖小红书、Twitter 等社交平台还需要额外装一次 OpenCLI 浏览器插件并登录。</td></tr><tr><td>任务复杂度</td><td>很简单</td><td>固定常规任务：给一句检索需求，AI agent 自动体检、调用 Exa 搜索并整理结果，不需要切换工具或反复确认。</td></tr><tr><td>Skill 调用准确性</td><td>偏宽</td><td>根据名称、描述和触发规则判断：description 写明“搜/查/找”这类很常见的词都会触发它，用户说“帮我在电脑上找个文件”这种本地任务时也可能被它接住。</td></tr><tr><td>额外涉及费用</td><td>核心免费，扩展功能可能付费</td><td>MIT 许可证，固定常规任务用到的 Exa 搜索免费且不需要 Key；只有部署到服务器上做社交媒体抓取时，才可能需要约 1 美元/月的代理费用。</td></tr><tr><td>Token 消耗</td><td>低</td><td>固定常规任务：1 次体检加 1 次 Exa 搜索返回约 5 条结果，一两千字，AI agent 读取并摘要即可，不需要多轮往返。</td></tr><tr><td>风险值</td><td>低</td><td>固定常规任务只发送搜索关键词和网页链接，不涉及账号、Cookie 或写操作；官方说明 Cookie 只存本地不上传，代码开源可审查。</td></tr></tbody></table>
+    <h3 class="sub-h">安装准备</h3>
+    <table class="prep-table"><thead><tr><th>前期准备</th><th>是否必须</th><th>用户影响</th></tr></thead><tbody><tr><td>额外软件安装</td><td><ul class="prep-required-list"><li><span class="prep-scope">基础使用</span><span class="prep-sep">｜</span><strong class="prep-status">必须</strong><span class="prep-sep">｜</span><span class="prep-detail">需要 Python 和 agent-reach 命令行工具</span></li><li><span class="prep-scope">自动安装</span><span class="prep-sep">｜</span><strong class="prep-status">按条件</strong><span class="prep-sep">｜</span><span class="prep-detail">AI agent 会配置 Node.js、gh 和 mcporter</span></li><li><span class="prep-scope">扩展平台</span><span class="prep-sep">｜</span><strong class="prep-status">可选</strong><span class="prep-sep">｜</span><span class="prep-detail">小红书等平台还需 OpenCLI 浏览器插件</span></li></ul></td><td>自动安装通常几分钟完成；增加平台后还要维护扩展工具。</td></tr><tr><td>额外注册/登录的账号</td><td><ul class="prep-required-list"><li><span class="prep-scope">基础渠道</span><span class="prep-sep">｜</span><strong class="prep-status">不需要</strong><span class="prep-sep">｜</span><span class="prep-detail">网页、GitHub 等公开来源不用登录</span></li><li><span class="prep-scope">社交平台</span><span class="prep-sep">｜</span><strong class="prep-status">按条件</strong><span class="prep-sep">｜</span><span class="prep-detail">Twitter、Reddit、小红书等需要登录</span></li></ul></td><td>部分平台需要维护浏览器登录态；Twitter 还要手动导出 Cookie。</td></tr><tr><td>API KEY/联网服务</td><td><ul class="prep-required-list"><li><span class="prep-scope">基础渠道</span><span class="prep-sep">｜</span><strong class="prep-status">不需要</strong><span class="prep-sep">｜</span><span class="prep-detail">网页搜索和公开读取无需单独申请 Key</span></li><li><span class="prep-scope">播客转录</span><span class="prep-sep">｜</span><strong class="prep-status">按条件</strong><span class="prep-sep">｜</span><span class="prep-detail">需要申请免费的转录服务 Key</span></li></ul></td><td>启用播客转录前，需要申请并保管服务 Key。</td></tr><tr><td>涉及的数据与隐私</td><td><ul class="prep-required-list"><li><span class="prep-scope">公共搜索</span><span class="prep-sep">｜</span><strong class="prep-status">必然涉及</strong><span class="prep-sep">｜</span><span class="prep-detail">搜索词和网页链接会发送给外部服务</span></li><li><span class="prep-scope">社交平台</span><span class="prep-sep">｜</span><strong class="prep-status">按条件</strong><span class="prep-sep">｜</span><span class="prep-detail">浏览器登录态和 Cookie 会在本地使用</span></li></ul></td><td>扩展社交平台前，应核对登录态和 Cookie 的本地保存方式。</td></tr></tbody></table>
+  </section>
+
+  <section class="section">
+    <h2 class="section-title c-red"><span class="num">4</span>这个 Skill 适合你吗</h2>
+    <div class="fit-verdict"><p class="score-line">适合度：<span class="score-hl">8.2/10</span></p><p>Agent Reach 匹配你的需求。建议安装。</p></div>
+    <div class="two-col">
+      <div class="plain-box"><h3>适合场景</h3><ul><li>搜索AI行业新闻、模型发布和开源项目动态</li><li>查GitHub上的开源AI项目和技术讨论</li><li>用Claude Code这类能执行命令的AI agent完成检索</li></ul></div>
+      <div class="plain-box"><h3>不适合场景</h3><ul><li>需要小红书、B站等中文社区深度舆情，且还没装OpenCLI插件的情况</li><li>需要付费专业行研数据库的深度数据</li><li>需要直接产出成品报告，而不是原始检索结果</li></ul></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2 class="section-title c-blue"><span class="num">5</span>使用节奏建议</h2>
+    <ol class="steps"><li>第一次先用Exa搜索测一条你关心的行业新闻，看效果是否满足需求。</li><li>确认后再装OpenCLI浏览器插件并登录对应平台，解锁中文社区讨论。</li><li>出现某个平台频繁失败或登录态总掉线时停用该渠道，先按文档重试。</li></ol>
+  </section>
+
+  <details><summary>来源与尚不能确认的事项</summary><h3>主要来源</h3><ul><li><a href="https://github.com/Panniantong/Agent-Reach" target="_blank" rel="noreferrer noopener">Agent Reach GitHub 项目</a></li><li><a href="https://github.com/Panniantong/Agent-Reach#readme" target="_blank" rel="noreferrer noopener">项目 README</a></li><li><a href="https://raw.githubusercontent.com/Panniantong/agent-reach/main/agent_reach/skill/SKILL.md" target="_blank" rel="noreferrer noopener">SKILL.md 使用指南</a></li></ul><h3>尚不能确认</h3><ul><li>小红书、Twitter等登录态渠道是否存在账号封禁风险，官方文档提示但没有独立验证。</li><li>播客转录功能具体使用哪个转录服务、如何申请Key，本次未逐项确认。</li><li>下载量没有公开数值，未计入报告。</li></ul></details>
+
+  <aside class="notice">
+    <h2>说明</h2>
+    <ul>
+      <li>本报告中的 AI agent，指能够读取 Skill、理解任务，并按规则调用电脑软件或联网服务完成工作的 AI 助手，例如 Codex、Claude Code、Workbuddy 等。它能否执行命令、联网或调用工具，取决于具体产品和用户授予的权限。</li>
+      <li>本报告依据公开文件和只读检查静态完成，不代表 Skill 在本机已经安装、运行和长期使用后的用户体验；最终推荐度结合好用度得分和适合度得分加权平均得出。</li>
+      <li>“啥好用”不能替代专业评测，包括代码安全审计、恶意代码检测、软件质量与兼容性测试、隐私合规审查、许可证审查或法律意见。</li>
+      <li>下载或使用前，请核对官方来源、依赖、权限、数据去向、收费和许可证，并注意安全风险。</li>
+      <li>请勿在对话或报告中粘贴 API Key、Cookie、Token、密码等凭证；优先使用测试环境、最小权限、专用账号和可恢复备份。</li>
+      <li>任何安装、授权、付费、上传、发布或自动操作均须由用户确认。评分只作采用参考；项目更新后应重新评估。</li>
+    </ul>
+  </aside>
+
+  <div class="footer-line"><span>啥好用skill•盒小Feier</span></div>
+
+</main>
+</body>
+</html>
